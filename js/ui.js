@@ -7,8 +7,8 @@
 const DATA_KELOMPOK = {
   nama: "Halte Icar",
   anggota: [
-    { nama: ".", nrp: "." },
-    { nama: ".", nrp: "." },
+    { nama: "Rafi Attar Maulana", nrp: "5025241141" },
+    { nama: "Ananda Aryasatya Zhafran Aqila", nrp: "5025241142" },
   ],
 
   // Video objek asli. Isi youtubeId dengan kode setelah "v=" pada alamat video YouTube,
@@ -21,13 +21,13 @@ const DATA_KELOMPOK = {
   pembagian: [
     {
       anggota: "Nama Anggota 1",
-      tugas: "Model iCAR, pengemudi, motor, hierarki, animasi rute",
-      file: "icar.js, motor.js, hierarchy.js, animation.js",
+      tugas: "nihil",
+      file: "walahi",
     },
     {
       anggota: "Nama Anggota 2",
-      tugas: "Lingkungan, texture, shader dan lighting, kamera",
-      file: "environment.js, textures.js, renderer.js, camera.js",
+      tugas: "hidup",
+      file: "jokowi",
     },
     {
       anggota: "Bersama",
