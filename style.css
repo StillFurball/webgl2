@@ -1,0 +1,1107 @@
+/* style.css — Halaman utama Tugas 2
+   Bentuk dan warna diambil dari lokasi aslinya: dua papan putih mengapit tiang biru,
+   sudut kanan-atas dan kiri-bawah membesar, curb kuning-hitam, paving abu. */
+
+:root {
+  --tiang: #1354b8;
+  --tiang-gelap: #0e3f8c;
+  --emas: #8a7424;
+  --curb-kuning: #e0b52c;
+  --curb-hitam: #2b2f35;
+  --paving: #4c4f53;
+  --paving-terang: #767a7f;
+  --papan: #f1f3f3;
+  --garis: #c9cdd0;
+  --tinta: #1e2226;
+  --tinta-lembut: #4f565c;
+  --sorot: #ff8c14;
+
+  --sudut-besar: 56px;
+  --sudut-kecil: 8px;
+
+  /* Rasio canvas kecil di pojok saat halaman digulir */
+  --rasio: 1.7778;
+
+  --font-teks: "Barlow", "Bahnschrift", "Segoe UI", system-ui, sans-serif;
+  --font-judul: "Barlow Condensed", "Bahnschrift SemiCondensed", "Arial Narrow", "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  --lebar-mini: 320px;
+  margin: 0;
+  color: var(--tinta);
+  background-color: var(--paving);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='48'%3E%3Cpath d='M-36 60L-24 48L0 72L-12 84ZM-24 48L0 24L12 36L-12 60ZM-12 60L0 48L24 72L12 84ZM-36 12L-24 0L0 24L-12 36ZM0 48L24 24L36 36L12 60ZM12 60L24 48L48 72L36 84ZM-24 0L0 -24L12 -12L-12 12ZM-12 12L0 0L24 24L12 36ZM24 48L48 24L60 36L36 60ZM0 0L24 -24L36 -12L12 12ZM12 12L24 0L48 24L36 36ZM24 0L48 -24L60 -12L36 12Z' fill='none' stroke='%23000' stroke-opacity='.16' stroke-width='1.2'/%3E%3C/svg%3E");
+  font-family: var(--font-teks);
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--font-judul);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+code {
+  padding: 0 0.25em;
+  border-radius: 3px;
+  background: rgba(19, 84, 184, 0.09);
+  color: var(--tiang-gelap);
+  font-family: inherit;
+  font-weight: 600;
+}
+
+a {
+  color: var(--tiang);
+}
+
+:focus-visible {
+  outline: 3px solid var(--curb-kuning);
+  outline-offset: 2px;
+}
+
+.sheet :focus-visible {
+  outline-color: var(--tiang);
+}
+
+/* ─── Kepala Halaman ─────────────────────────────────────────────────────── */
+
+.masthead {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 18px;
+  padding: 10px 24px 0;
+  color: #fff;
+}
+
+.stop-sign {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 54px;
+  margin-bottom: 12px;
+  border-radius: 3px 14px 3px 14px;
+  background: var(--papan);
+  color: var(--tiang);
+  font-family: var(--font-judul);
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stop-sign::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 14px;
+  height: 12px;
+  margin-left: -7px;
+  background: var(--tiang);
+}
+
+.masthead-title {
+  padding-bottom: 10px;
+}
+
+.masthead h1 {
+  font-size: clamp(1.7rem, 2.6vw, 2.3rem);
+  font-weight: 700;
+}
+
+.masthead-title p {
+  max-width: 62ch;
+  margin: 2px 0 0;
+  color: #e2e4e6;
+  font-size: 0.95rem;
+  line-height: 1.3;
+}
+
+.team-summary {
+  max-width: 460px;
+  padding-bottom: 10px;
+  text-align: right;
+}
+
+.team-name {
+  font-family: var(--font-judul);
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.team-summary .team-hint {
+  margin: 2px 0 0;
+  color: var(--curb-kuning);
+  font-size: 0.82rem;
+  line-height: 1.25;
+}
+
+.team-members {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0 14px;
+  margin: 0;
+  padding: 0;
+  color: #e2e4e6;
+  font-size: 0.92rem;
+  line-height: 1.3;
+  list-style: none;
+}
+
+/* Strip curb: blok kuning dan abu-hitam bergantian dengan sambungan tipis */
+.curb {
+  height: 16px;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 45%, rgba(0, 0, 0, 0.28)),
+    repeating-linear-gradient(
+      90deg,
+      var(--curb-kuning) 0 58px,
+      rgba(0, 0, 0, 0.55) 58px 60px,
+      var(--curb-hitam) 60px 118px,
+      rgba(0, 0, 0, 0.55) 118px 120px
+    );
+}
+
+.curb--thin {
+  height: 9px;
+  margin: 0 32px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      var(--curb-kuning) 0 38px,
+      var(--curb-hitam) 38px 76px
+    );
+}
+
+/* ─── Viewer ─────────────────────────────────────────────────────────────── */
+
+/* Layar pertama: kepala halaman dan satu canvas yang mengisi sisa tinggi layar */
+.layar {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100svh;
+  min-height: 560px;
+}
+
+.masthead,
+.layar > .curb {
+  flex: none;
+}
+
+.viewer {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--curb-hitam);
+}
+
+#glCanvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #6d8fb5;
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+#glCanvas:active {
+  cursor: grabbing;
+}
+
+#glCanvas:focus {
+  outline: none;
+}
+
+#glCanvas:focus-visible {
+  outline: 3px solid var(--curb-kuning);
+  outline-offset: -3px;
+}
+
+.focus-hint {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  margin: 0;
+  padding: 2px 10px;
+  border-radius: 3px 9px 3px 9px;
+  background: rgba(20, 22, 26, 0.72);
+  color: #fff;
+  font-size: 0.88rem;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+#glCanvas:focus ~ .focus-hint {
+  opacity: 0;
+}
+
+.stage-status {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  padding: 32px;
+  background: var(--curb-hitam);
+  color: #fff;
+  text-align: center;
+}
+
+.stage-status p {
+  margin: 0;
+}
+
+.stage-status-bar {
+  height: 10px;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(90deg, var(--curb-kuning) 0 28px, #15171a 28px 56px);
+  background-size: 56px 100%;
+  animation: jalan 0.9s linear infinite;
+}
+
+.stage-status.is-error .stage-status-bar {
+  animation: none;
+}
+
+.stage-status[hidden] {
+  display: none;
+}
+
+@keyframes jalan {
+  to {
+    background-position: 56px 0;
+  }
+}
+
+/* HUD menempel di bagian atas canvas, yang umumnya berisi langit. Seret mouse tetap sampai ke canvas. */
+.hud {
+  position: absolute;
+  top: 12px;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px 12px;
+  align-content: start;
+  width: 440px;
+  margin: 0;
+  padding: 8px 12px 10px;
+  border-radius: 3px 14px 3px 14px;
+  background: rgba(20, 22, 26, 0.68);
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.hud--scene {
+  left: 12px;
+}
+
+.hud--render {
+  right: 12px;
+}
+
+.viewer:has(.stage-status:not([hidden])) .hud {
+  visibility: hidden;
+}
+
+.hud dt {
+  color: #d3d6d9;
+  font-size: 0.78rem;
+  line-height: 1.2;
+}
+
+.hud dd {
+  margin: 0;
+  font-family: var(--font-judul);
+  font-size: 1.04rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.hud-wide {
+  grid-column: span 2;
+}
+
+.page-nav {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 2;
+  display: flex;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 3px 12px 3px 12px;
+  background: rgba(20, 22, 26, 0.72);
+}
+
+.page-nav a {
+  padding: 3px 10px;
+  border-radius: 2px 9px 2px 9px;
+  color: #fff;
+  font-size: 0.92rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.page-nav a:hover {
+  background: var(--curb-kuning);
+  color: var(--curb-hitam);
+}
+
+/* Saat viewer tergulir keluar layar, canvas pindah ke pojok agar tetap terlihat */
+.canvas-floating:not(.mini-hidden) #glCanvas {
+  position: fixed;
+  inset: auto 16px 16px auto;
+  z-index: 20;
+  width: var(--lebar-mini);
+  height: auto;
+  aspect-ratio: var(--rasio);
+  border: 5px solid var(--papan);
+  border-radius: 6px 28px 6px 28px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
+}
+
+.canvas-floating .focus-hint {
+  display: none;
+}
+
+.mini-bar {
+  position: fixed;
+  right: 16px;
+  bottom: calc(16px + var(--lebar-mini) / var(--rasio) + 8px);
+  z-index: 21;
+  display: none;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.canvas-floating .mini-bar {
+  display: flex;
+}
+
+.canvas-floating.mini-hidden .mini-bar {
+  bottom: 16px;
+}
+
+.canvas-floating.mini-hidden #miniBack {
+  display: none;
+}
+
+/* ─── Lembar Isi ─────────────────────────────────────────────────────────── */
+
+/* Ruang bawah supaya isi terakhir bisa digulir melewati canvas kecil */
+.sheet {
+  padding: 8px 0 calc(var(--lebar-mini) / var(--rasio) + 64px);
+  background: var(--papan);
+}
+
+.block {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 28px 32px 32px;
+}
+
+.lead {
+  max-width: 76ch;
+  margin: 8px 0 20px;
+  color: var(--tinta-lembut);
+}
+
+/* ─── Tombol dan Slider ──────────────────────────────────────────────────── */
+
+.btn {
+  min-height: 36px;
+  padding: 5px 13px;
+  border: 1.5px solid var(--paving-terang);
+  border-radius: 3px 11px 3px 11px;
+  background: #fff;
+  color: var(--tinta);
+  font: inherit;
+  font-size: 0.96rem;
+  font-weight: 500;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.btn:hover {
+  border-color: var(--tiang);
+  color: var(--tiang);
+}
+
+.btn[aria-pressed="true"] {
+  border-color: var(--tiang);
+  background: var(--tiang);
+  color: #fff;
+}
+
+.btn:disabled {
+  border-color: var(--garis);
+  color: #8b9196;
+  cursor: default;
+}
+
+.btn--small {
+  min-height: 30px;
+  padding: 3px 10px;
+  font-size: 0.88rem;
+}
+
+.control-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0 28px;
+}
+
+.control-group {
+  padding-left: 16px;
+  border-left: 3px solid var(--garis);
+}
+
+.control-group h3 {
+  margin-bottom: 10px;
+  color: var(--tiang);
+}
+
+.control-group h4 {
+  margin: 16px 0 6px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0 10px;
+}
+
+.slider {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0 8px;
+  margin: 0 0 8px;
+  font-size: 0.96rem;
+}
+
+.slider output {
+  color: var(--tinta-lembut);
+  font-variant-numeric: tabular-nums;
+}
+
+.slider input {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin: 2px 0 0;
+  accent-color: var(--tiang);
+}
+
+.select-field {
+  display: grid;
+  gap: 2px;
+  margin: 0 0 10px;
+  font-size: 0.96rem;
+}
+
+.select-field select {
+  min-height: 36px;
+  padding: 4px 8px;
+  border: 1.5px solid var(--paving-terang);
+  border-radius: 3px;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+  font-size: 0.96rem;
+}
+
+.keys-title {
+  margin-top: 26px;
+}
+
+.keys-note {
+  margin: 4px 0 12px;
+  color: var(--tinta-lembut);
+}
+
+.keys {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 6px 24px;
+  margin: 0;
+}
+
+.keys > div {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  align-items: baseline;
+  gap: 8px;
+}
+
+.keys dt {
+  font-weight: 600;
+}
+
+.keys dd {
+  margin: 0;
+  color: var(--tinta-lembut);
+  font-size: 0.96rem;
+}
+
+kbd {
+  display: inline-block;
+  min-width: 1.6em;
+  margin-right: 3px;
+  padding: 0 0.35em;
+  border: 1.5px solid var(--paving-terang);
+  border-bottom-width: 3px;
+  border-radius: 4px;
+  background: #fff;
+  font-family: inherit;
+  font-size: 0.9em;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ─── Galeri Foto ────────────────────────────────────────────────────────── */
+
+.galeri-grup + .galeri-grup {
+  margin-top: 28px;
+}
+
+.galeri-isi {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.foto {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+}
+
+.foto-frame {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  border-radius: var(--sudut-kecil) 32px var(--sudut-kecil) 32px;
+  background: var(--curb-hitam);
+}
+
+.foto-frame img {
+  position: absolute;
+  max-width: none;
+}
+
+.foto figcaption {
+  display: grid;
+  line-height: 1.3;
+}
+
+.foto figcaption strong {
+  font-weight: 600;
+}
+
+.foto figcaption span {
+  color: var(--tinta-lembut);
+  font-size: 0.96rem;
+}
+
+/* ─── Video ──────────────────────────────────────────────────────────────── */
+
+.block--video {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.video-slot {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--sudut-kecil) var(--sudut-besar) var(--sudut-kecil) var(--sudut-besar);
+  background: var(--curb-hitam);
+  color: #fff;
+}
+
+.video-slot video,
+.video-slot iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.video-hint {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  padding: 28px clamp(24px, 6%, 64px);
+}
+
+.video-hint h3 {
+  margin-bottom: 8px;
+}
+
+.video-hint p {
+  max-width: 54ch;
+  margin: 0 0 8px;
+}
+
+.video-hint code {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+.video-hint a {
+  color: var(--curb-kuning);
+}
+
+.video-link {
+  margin-top: 8px;
+}
+
+.video-external {
+  font-weight: 600;
+}
+
+.video-text p {
+  margin: 8px 0 16px;
+  color: var(--tinta-lembut);
+}
+
+.plain-list {
+  margin: 8px 0 0;
+  padding-left: 1.1em;
+  color: var(--tinta-lembut);
+}
+
+.plain-list li + li {
+  margin-top: 4px;
+}
+
+/* ─── Tree ───────────────────────────────────────────────────────────────── */
+
+.tree-layout {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.tree-info {
+  position: sticky;
+  top: 16px;
+  padding: 14px 16px 16px;
+  border-radius: var(--sudut-kecil) 32px var(--sudut-kecil) 32px;
+  background: var(--tiang);
+  color: #fff;
+}
+
+.tree-info h3 {
+  font-size: 1.5rem;
+}
+
+.tree-info p {
+  margin: 6px 0 0;
+}
+
+.tree-info code {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+.tree-path {
+  color: #dbe5f5;
+  font-size: 0.92rem;
+  line-height: 1.3;
+}
+
+.tree-formula {
+  padding: 8px 10px;
+  border-radius: 3px;
+  background: var(--tiang-gelap);
+  font-size: 0.94rem;
+  line-height: 1.35;
+}
+
+.tree-facts {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 2px 10px;
+  margin: 10px 0 12px;
+  font-size: 0.94rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.tree-facts dt {
+  color: #dbe5f5;
+}
+
+.tree-facts dd {
+  margin: 0;
+}
+
+.tree-info .btn {
+  border-color: #fff;
+  margin: 0 6px 6px 0;
+}
+
+.tree-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  margin-bottom: 8px;
+}
+
+.tree-legend {
+  margin: 0 0 0 8px;
+  color: var(--tinta-lembut);
+  font-size: 0.92rem;
+}
+
+.legend-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--tiang);
+}
+
+.tree-scroll {
+  overflow: auto;
+  max-height: 680px;
+  border: 1.5px solid var(--garis);
+  border-radius: 4px;
+  background: #fff;
+}
+
+#treeSvg {
+  display: block;
+  font-family: var(--font-teks);
+  font-size: 14px;
+}
+
+.tlink {
+  fill: none;
+  stroke: #a2a7ac;
+  stroke-width: 1.3;
+}
+
+.tnode {
+  cursor: pointer;
+  outline: none;
+}
+
+.tbox {
+  fill: #fff;
+  stroke: var(--paving-terang);
+  stroke-width: 1.2;
+  rx: 3;
+}
+
+.tnode:hover .tbox {
+  fill: #e9eff9;
+  stroke: var(--tiang);
+}
+
+.tnode:focus-visible .tbox {
+  stroke: var(--tiang);
+  stroke-width: 3;
+}
+
+.tlabel {
+  fill: var(--tinta);
+  dominant-baseline: central;
+}
+
+.tcount {
+  fill: var(--tinta-lembut);
+  font-size: 12.5px;
+}
+
+.tjoint {
+  fill: var(--tiang);
+}
+
+.ttoggle circle {
+  fill: var(--papan);
+  stroke: var(--paving-terang);
+}
+
+.ttoggle:hover circle {
+  fill: var(--curb-kuning);
+}
+
+.ttoggle path {
+  fill: none;
+  stroke: var(--tinta);
+  stroke-width: 1.5;
+}
+
+.tnode.in-subtree .tbox {
+  fill: #ffe9d1;
+  stroke: var(--sorot);
+}
+
+.tnode.is-selected .tbox {
+  fill: var(--sorot);
+  stroke: #b85c00;
+}
+
+.tnode.is-selected .tlabel,
+.tnode.is-selected .tcount {
+  fill: #1c1206;
+  font-weight: 600;
+}
+
+.tnode.is-selected .tjoint {
+  fill: #1c1206;
+}
+
+/* ─── Tabel ──────────────────────────────────────────────────────────────── */
+
+.block--split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 40px;
+  align-items: start;
+}
+
+.draft-note {
+  margin: 8px 0 0;
+  padding-left: 10px;
+  border-left: 3px solid var(--curb-kuning);
+  color: var(--tinta-lembut);
+  font-size: 0.96rem;
+}
+
+.data-table {
+  width: 100%;
+  margin-top: 12px;
+  border-collapse: collapse;
+  font-size: 0.98rem;
+  line-height: 1.35;
+}
+
+.data-table th {
+  padding: 0 10px 6px 0;
+  border-bottom: 2px solid var(--tinta);
+  font-family: var(--font-judul);
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.data-table td {
+  padding: 8px 10px 8px 0;
+  border-bottom: 1px solid var(--garis);
+  vertical-align: top;
+}
+
+.data-table td:first-child {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.row-extra td {
+  background: rgba(224, 181, 44, 0.16);
+}
+
+/* ─── Layar Sempit ───────────────────────────────────────────────────────── */
+
+@media (max-width: 1180px) {
+  .control-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 28px;
+  }
+}
+
+/* HUD tidak lagi muat di atas canvas, jadi pindah ke bawahnya */
+@media (max-width: 1100px) {
+  .layar {
+    height: auto;
+    min-height: 0;
+  }
+
+  .viewer {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stage {
+    position: relative;
+    inset: auto;
+    grid-column: 1 / -1;
+    height: 68vh;
+    height: 68svh;
+    min-height: 320px;
+  }
+
+  .hud {
+    position: static;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: auto;
+    padding: 12px 16px 16px;
+    border-radius: 0;
+    background: none;
+  }
+
+  .page-nav {
+    position: static;
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+    border-radius: 0;
+    background: var(--curb-hitam);
+  }
+}
+
+@media (max-width: 1000px) {
+  .tree-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .tree-info {
+    position: static;
+  }
+}
+
+@media (max-width: 800px) {
+  :root {
+    --sudut-besar: 36px;
+  }
+
+  body {
+    --lebar-mini: 200px;
+  }
+
+  .masthead {
+    grid-template-columns: auto minmax(0, 1fr);
+    padding: 14px 16px 0;
+    gap: 14px;
+  }
+
+  .team-summary {
+    grid-column: 1 / -1;
+    max-width: none;
+    padding-bottom: 12px;
+    text-align: left;
+  }
+
+  .masthead-title {
+    padding-bottom: 6px;
+  }
+
+  .stop-sign {
+    margin-bottom: 6px;
+  }
+
+  .team-members {
+    justify-content: flex-start;
+  }
+
+  .viewer {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hud--scene {
+    padding-bottom: 0;
+  }
+
+  .block {
+    padding: 22px 16px 24px;
+  }
+
+  .curb--thin {
+    margin: 0 16px;
+  }
+
+  .block--video,
+  .block--split {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .control-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .data-table td:first-child {
+    white-space: normal;
+  }
+
+  .video-slot {
+    aspect-ratio: auto;
+    min-height: 220px;
+    border-radius: var(--sudut-kecil) 32px var(--sudut-kecil) 32px;
+  }
+
+  .video-slot video,
+  .video-slot iframe {
+    aspect-ratio: 16 / 9;
+    height: auto;
+  }
+
+  .tree-scroll {
+    max-height: 520px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .stage-status-bar {
+    animation: none;
+  }
+
+  .focus-hint {
+    transition: none;
+  }
+}

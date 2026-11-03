@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Halte Robotika dan iCAR</title>
+  <meta name="description" content="Tugas 2 Grafika Komputer: scene Halte iCAR Robotika di ITS, dibuat dengan WebGL2." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600;700&display=swap"
+    media="print"
+    onload="this.media='all'"
+  />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+
+  <main>
+
+    <div class="layar">
+      <header class="masthead">
+        <div class="stop-sign" aria-hidden="true">1</div>
+        <div class="masthead-title">
+          <h1>Halte Robotika dan iCAR</h1>
+          <p>Tugas 2 Grafika Komputer. Scene area ITS di luar Teknik Informatika, dibuat dengan WebGL2.</p>
+        </div>
+        <div class="team-summary" id="teamSummary"></div>
+      </header>
+
+      <div class="curb" aria-hidden="true"></div>
+
+      <section class="viewer" id="viewer" aria-label="Scene WebGL">
+        <div class="stage" id="canvasStage">
+          <canvas
+            id="glCanvas"
+            tabindex="0"
+            aria-label="Scene 3D Halte iCAR Robotika. Seret untuk memutar kamera, klik lalu pakai keyboard untuk bergerak."
+          ></canvas>
+          <p class="focus-hint">Klik canvas untuk memakai keyboard dan zoom</p>
+          <div class="stage-status" id="stageStatus" role="status">
+            <div class="stage-status-bar" aria-hidden="true"></div>
+            <p id="stageStatusText">Menyiapkan texture dan model. Biasanya beberapa detik.</p>
+          </div>
+        </div>
+
+        <dl class="hud hud--scene">
+          <div><dt>Status iCAR</dt><dd id="hudStatus">-</dd></div>
+          <div><dt>Laju</dt><dd id="hudSpeed">-</dd></div>
+          <div><dt>Jam</dt><dd id="hudHour">-</dd></div>
+          <div><dt>Lampu</dt><dd id="hudLamps">-</dd></div>
+          <div class="hud-wide"><dt>Kamera</dt><dd id="hudCamera">-</dd></div>
+          <div><dt>FPS</dt><dd id="hudFps">-</dd></div>
+          <div><dt>Draw call</dt><dd id="hudDraws">-</dd></div>
+        </dl>
+
+        <dl class="hud hud--render">
+          <div><dt>Shading</dt><dd id="hudShading">-</dd></div>
+          <div><dt>Filtering</dt><dd id="hudFilter">-</dd></div>
+          <div><dt>Wrapping</dt><dd id="hudWrap">-</dd></div>
+          <div><dt>UV Scale</dt><dd id="hudUv">-</dd></div>
+          <div><dt>Shininess</dt><dd id="hudShininess">-</dd></div>
+          <div><dt>Proyeksi</dt><dd id="hudProjection">-</dd></div>
+          <div class="hud-wide"><dt>Light</dt><dd id="hudLight">-</dd></div>
+        </dl>
+
+        <nav class="page-nav" aria-label="Isi halaman">
+          <a href="#kontrol">Kontrol</a>
+          <a href="#galeri">Foto asli</a>
+          <a href="#tree">Tree</a>
+        </nav>
+      </section>
+    </div>
+
+    <div class="curb" aria-hidden="true"></div>
+
+    <div class="sheet">
+
+      <section class="block" id="kontrol">
+        <h2>Kontrol scene</h2>
+        <p class="lead">Setiap kontrol langsung mengubah canvas. Saat halaman digulir, canvas mengecil di pojok kanan bawah supaya perubahannya tetap terlihat.</p>
+
+        <div class="control-grid" id="controlGrid"></div>
+
+        <h3 class="keys-title">Keyboard</h3>
+        <p class="keys-note">Klik canvas dulu, lalu tekan tombolnya. Tombol hanya bekerja selama canvas aktif.</p>
+        <dl class="keys">
+          <div><dt><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></dt><dd>Kamera maju, kiri, mundur, kanan</dd></div>
+          <div><dt><kbd>Q</kbd><kbd>E</kbd></dt><dd>Kamera turun, naik</dd></div>
+          <div><dt><kbd>Panah</kbd></dt><dd>Memutar arah pandang</dd></div>
+          <div><dt>Seret mouse</dt><dd>Mengorbit target</dd></div>
+          <div><dt>Gulir mouse</dt><dd>Mendekat, menjauh, setelah canvas diklik</dd></div>
+          <div><dt><kbd>C</kbd></dt><dd>Preset kamera berikutnya</dd></div>
+          <div><dt><kbd>P</kbd></dt><dd>Perspective, orthographic</dd></div>
+          <div><dt><kbd>Z</kbd></dt><dd>Depth test</dd></div>
+          <div><dt><kbd>F</kbd></dt><dd>Flat, smooth shading</dd></div>
+          <div><dt><kbd>T</kbd></dt><dd>Filtering texture</dd></div>
+          <div><dt><kbd>G</kbd></dt><dd>Wrapping texture</dd></div>
+          <div><dt><kbd>Y</kbd></dt><dd>Texture menyala, mati</dd></div>
+          <div><dt><kbd>[</kbd><kbd>]</kbd></dt><dd>UV Scale</dd></div>
+          <div><dt><kbd>-</kbd><kbd>+</kbd></dt><dd>Shininess</dd></div>
+          <div><dt><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd></dt><dd>Ambient, diffuse, specular</dd></div>
+          <div><dt><kbd>B</kbd></dt><dd>Bayangan</dd></div>
+          <div><dt><kbd>N</kbd></dt><dd>Siang, malam</dd></div>
+          <div><dt><kbd>L</kbd></dt><dd>Lampu otomatis, nyala, mati</dd></div>
+          <div><dt><kbd>X</kbd></dt><dd>Wireframe</dd></div>
+          <div><dt><kbd>Spasi</kbd></dt><dd>Jeda, lanjutkan animasi</dd></div>
+          <div><dt><kbd>R</kbd></dt><dd>Reset semua</dd></div>
+        </dl>
+      </section>
+
+      <div class="curb curb--thin" aria-hidden="true"></div>
+
+      <section class="block" id="galeri">
+        <h2>Foto objek asli</h2>
+        <p class="lead">Foto yang menjadi acuan scene. Tombol pada setiap foto memindahkan kamera ke sudut yang sama, lalu membawa halaman kembali ke canvas.</p>
+        <div id="photoGallery"></div>
+      </section>
+
+      <div class="curb curb--thin" aria-hidden="true"></div>
+
+      <div class="curb curb--thin" aria-hidden="true"></div>
+
+      <section class="block" id="tree">
+        <h2>Desain tree hubungan antar objek</h2>
+        <p class="lead">Diagram ini dibangun dari array <code>figure</code> yang dipakai saat rendering, jadi selalu sama dengan kodenya. Setiap node menyimpan satu <code>child</code> (anak pertama) dan satu <code>sibling</code> (saudara berikutnya), struktur left-child right-sibling yang sama dengan <code>figure.js</code> pada praktikum 07.</p>
+
+        <div class="tree-layout">
+          <aside class="tree-info" id="treeInfo" aria-live="polite"></aside>
+          <div class="tree-main">
+            <div class="tree-toolbar">
+              <button type="button" class="btn" id="treeOpenAll">Buka semua node</button>
+              <button type="button" class="btn" id="treeSummary">Tampilan ringkas</button>
+              <p class="tree-legend"><span class="legend-dot" aria-hidden="true"></span>Titik biru: matrix lokalnya dihitung ulang tiap frame. Angka: jumlah node di dalamnya.</p>
+            </div>
+            <div class="tree-scroll" tabindex="0" role="group" aria-label="Diagram tree objek">
+              <svg id="treeSvg" role="tree" aria-label="Hierarki objek scene"></svg>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="curb curb--thin" aria-hidden="true"></div>
+    </div>
+  </main>
+
+  <div class="mini-bar" id="miniBar">
+    <button type="button" class="btn btn--small" id="miniBack">Ke viewer besar</button>
+    <button type="button" class="btn btn--small" id="miniToggle">Sembunyikan canvas</button>
+  </div>
+
+  <script>
+    // Dipasang sebelum script lain supaya kegagalan saat memuat tampil di halaman, bukan hanya di console.
+    (function () {
+      function tampilkan(pesan) {
+        var box = document.getElementById("stageStatus");
+        if (!box || box.classList.contains("is-error")) return;
+        box.classList.add("is-error");
+        box.setAttribute("role", "alert");
+        document.getElementById("stageStatusText").textContent = pesan;
+      }
+
+      var uji = document.createElement("canvas").getContext("webgl2");
+      if (!uji) {
+        tampilkan("Browser ini tidak menyediakan WebGL2, jadi scene tidak bisa digambar. Coba Chrome, Edge, atau Firefox versi terbaru dan nyalakan akselerasi grafis di pengaturannya. Foto dan isi halaman lain tetap bisa dibaca.");
+      } else {
+        var lose = uji.getExtension("WEBGL_lose_context");
+        if (lose) lose.loseContext();
+      }
+
+      window.addEventListener("error", function () {
+        if (window.sceneStarted) return;
+        tampilkan("Scene gagal dimuat. Pastikan semua file di folder js lengkap, lalu lihat pesan error di console (F12).");
+      });
+    })();
+  </script>
+
+  <script src="./js/math3d.js"></script>
+  <script src="./js/geometry.js"></script>
+  <script src="./js/textures.js"></script>
+  <script src="./js/renderer.js"></script>
+  <script src="./js/hierarchy.js"></script>
+  <script src="./js/icar.js"></script>
+  <script src="./js/motor.js"></script>
+  <script src="./js/environment.js"></script>
+  <script src="./js/animation.js"></script>
+  <script src="./js/camera.js"></script>
+  <script src="./js/ui.js"></script>
+  <script src="./js/main.js"></script>
+</body>
+
+</html>
