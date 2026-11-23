@@ -153,8 +153,6 @@ function updateFreeCamera(dt) {
   const right = Vec3.normalize(Vec3.cross(flatForward, [0, 1, 0]));
 
   let move = [0, 0, 0];
-  if (keys.w) move = Vec3.add(move, flatForward);
-  if (keys.s) move = Vec3.subtract(move, flatForward);
   if (keys.d) move = Vec3.add(move, right);
   if (keys.a) move = Vec3.subtract(move, right);
   if (keys.e) move = Vec3.add(move, [0, 1, 0]);

@@ -91,7 +91,7 @@ uniform float u_specularStrength;
 uniform float u_shininess;
 uniform float u_translucency;
 
-// Lampu jalan dan lampu iCAR
+// Lampu depan iCAR
 uniform int u_pointLightCount;
 uniform vec3 u_pointPosition[${MAX_POINT_LIGHTS}];
 uniform vec3 u_pointColor[${MAX_POINT_LIGHTS}];

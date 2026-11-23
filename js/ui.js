@@ -102,7 +102,7 @@ const FOTO = [
 
 const MATERI = [
   { sumber: "Praktikum 01", isi: "Canvas 2D: semua texture digambar dengan kode di textures.js, termasuk papan halte dan velg iCAR." },
-  { sumber: "Praktikum 02", isi: "Buffer, attribute, vertex dan fragment shader, draw call, gl.LINES untuk kabel listrik, requestAnimationFrame." },
+  { sumber: "Praktikum 02", isi: "Buffer, attribute, vertex dan fragment shader, draw call, requestAnimationFrame." },
   { sumber: "Praktikum 03", isi: "Translasi, rotasi, skala, urutan T × R × S, pivot sendi, delta time, keyboard state-based dan event-based." },
   { sumber: "Praktikum 04", isi: "Mat4.lookAt, perspective dan orthographic, FOV, depth test, VAO, kontrol kamera." },
   { sumber: "Praktikum 06", isi: "Phong per-fragment (ambient, diffuse, specular), Normal Matrix, flat dan smooth shading, UV, filtering, mipmap, wrapping, UV Scale, shininess." },
@@ -412,7 +412,6 @@ const NAMA_LAMPU = { AUTO: "Otomatis", ON: "Nyala", OFF: "Mati" };
 
 // Sendi yang bisa digerakkan manual, seperti slider pada figure.js
 const SLIDER_SENDI = [
-  { key: "steer", label: "Belok roda depan", min: -32, max: 32 },
   { key: "sensorYaw", label: "Putar kepala sensor", min: -90, max: 90 },
   { key: "cameraPitch", label: "Angguk kamera", min: -40, max: 40 },
   { key: "headYaw", label: "Toleh pengemudi", min: -70, max: 70 },
@@ -574,7 +573,7 @@ function bangunKontrolAnimasi() {
   tambahTombol(row, { teks: "Reset semua", aksi: sceneActions.reset });
 
   tambahSlider(group, {
-    label: "Laju lalu lintas",
+    label: "Kecepatan kendaraan",
     min: 0,
     max: 3,
     step: 0.05,
@@ -604,7 +603,6 @@ function bangunKontrolAnimasi() {
       set: (value) => {
         theta[sendi.key] = value;
         animation.manual[sendi.key] = true;
-        if (sendi.key === "steer") theta.steeringWheel = value * 6;
       },
       setelah: syncControls,
       format: (value) => `${Math.round(value)}°`,
@@ -643,7 +641,7 @@ function isiHud() {
   const position = view.position;
 
   hud.Status.textContent = animation.playing ? animation.state : `${animation.state}, dijeda`;
-  hud.Speed.textContent = `${Math.round(animation.speed * 3.6)} km/jam`;
+  hud.Speed.textContent = `${Math.round(Math.abs(animation.speed) * 3.6)} km/jam`;
   hud.Hour.textContent = formatJam(daylight.hour);
   hud.Lamps.textContent = `${NAMA_LAMPU[daylight.lampsMode]}${frameLighting.lampsOn ? ", menyala" : ""}`;
   hud.Camera.textContent = `${CAMERA_PRESETS[camera.presetName].label} (${angka(position[0], 1)}; ${angka(position[1], 1)}; ${angka(position[2], 1)})`;
@@ -685,7 +683,7 @@ const TREE_TEPI = 10;
 
 // Node grup yang langsung terbuka di tampilan ringkas
 const TREE_TERBUKA_AWAL = new Set([
-  "Dunia", "iCAR", "Sasis", "Muka Depan", "Tiang Sensor", "Kepala Sensor", "Halte iCAR 1", "Tiang Biru", "Lalu Lintas",
+  "Dunia", "Jalan", "Pepohonan", "iCAR", "Sasis", "Muka Depan", "Tiang Sensor", "Kepala Sensor", "Halte iCAR 1", "Tiang Biru",
 ]);
 
 const treeTerbuka = new Set();
@@ -1043,8 +1041,6 @@ function initUI() {
 
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(gambarTree);
 
-  const stopDuration = byId("stopDuration");
-  if (stopDuration) stopDuration.textContent = STOP_DURATION;
   byId("stageStatus").hidden = true;
 }
 

@@ -39,7 +39,7 @@
           <canvas
             id="glCanvas"
             tabindex="0"
-            aria-label="Scene 3D Halte iCAR Robotika. Seret untuk memutar kamera, klik lalu pakai keyboard untuk bergerak."
+            aria-label="Scene 3D Halte iCAR Robotika. Seret untuk memutar kamera; klik canvas, lalu tekan W atau S untuk menggerakkan iCAR."
           ></canvas>
           <p class="focus-hint">Klik canvas untuk memakai keyboard dan zoom</p>
           <div class="stage-status" id="stageStatus" role="status">
@@ -89,7 +89,8 @@
         <h3 class="keys-title">Keyboard</h3>
         <p class="keys-note">Klik canvas dulu, lalu tekan tombolnya. Tombol hanya bekerja selama canvas aktif.</p>
         <dl class="keys">
-          <div><dt><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></dt><dd>Kamera maju, kiri, mundur, kanan</dd></div>
+          <div><dt><kbd>W</kbd><kbd>S</kbd></dt><dd>iCAR maju dan mundur</dd></div>
+          <div><dt><kbd>A</kbd><kbd>D</kbd></dt><dd>Kamera kiri dan kanan</dd></div>
           <div><dt><kbd>Q</kbd><kbd>E</kbd></dt><dd>Kamera turun, naik</dd></div>
           <div><dt><kbd>Panah</kbd></dt><dd>Memutar arah pandang</dd></div>
           <div><dt>Seret mouse</dt><dd>Mengorbit target</dd></div>
@@ -185,7 +186,6 @@
   <script src="./js/renderer.js"></script>
   <script src="./js/hierarchy.js"></script>
   <script src="./js/icar.js"></script>
-  <script src="./js/motor.js"></script>
   <script src="./js/environment.js"></script>
   <script src="./js/animation.js"></script>
   <script src="./js/camera.js"></script>

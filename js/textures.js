@@ -1331,25 +1331,12 @@ function loadTextures() {
   TEX.paver = createTexture(paverTexture(), tile);
   TEX.gutter = createTexture(gutterTexture(), tile);
   TEX.curb = createTexture(curbTexture());
-  TEX.litter = createTexture(litterTexture(), tile);
   TEX.lawn = createTexture(lawnTexture(), tile);
-  TEX.dustyRoad = createTexture(dustyRoadTexture(), tile);
   TEX.concrete = createTexture(concreteTexture(), tile);
   TEX.bark = createTexture(barkTexture(), tile);
   TEX.leaves = createTexture(leafAtlasTexture());
-  TEX.fallenLeaf = createTexture(fallenLeafTexture());
-  TEX.grass = createTexture(grassTuftTexture());
-  TEX.palm = createTexture(palmFrondTexture());
-  TEX.treeline = createTexture(treelineTexture(), tile);
   TEX.sky = createTexture(skyTexture(), tile);
   TEX.sign = createTexture(signFaceTexture());
-  TEX.speed = createTexture(speedSignTexture());
-  TEX.banner = createTexture(bannerTexture());
-  TEX.kawasan = createTexture(kawasanBoardTexture());
-  TEX.lab = createTexture(labBoardTexture());
-  TEX.glass = createTexture(glassBuildingTexture(), tile);
-  TEX.gable = createTexture(gableBuildingTexture());
-  TEX.roof = createTexture(roofTexture(), tile);
   TEX.rim = createTexture(wheelRimTexture());
   TEX.headlamp = createTexture(headlampTexture());
 }

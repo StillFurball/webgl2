@@ -561,7 +561,7 @@ function createIcar(parentId) {
   icar.root = addNode("iCAR", parentId, () => Mat4.chain(
     Mat4.translation(icar.x || 0, 0, icar.z || 0),
     Mat4.rotationY(icar.yaw || 0)
-  ), null, { note: "Posisi dan arah mengikuti rute" });
+  ), null, { note: "Posisi dikendalikan dengan W dan S" });
 
   // Sasis mengayun di atas suspensi; roda sengaja bukan child sasis
   icar.chassis = addNode("Sasis", icar.root, () => Mat4.chain(

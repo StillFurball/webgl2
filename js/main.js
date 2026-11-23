@@ -62,10 +62,9 @@ function computeLighting() {
     frameLighting.sunDirection = Vec3.normalize([-0.4, 0.8, 0.45]);
   }
 
-  // Bola lampu dan lampu mobil
+  // Lampu depan mobil
   const lampsOn = daylight.lampsMode === "ON" || (daylight.lampsMode === "AUTO" && frameLighting.isDark);
   frameLighting.lampsOn = lampsOn;
-  ENV_MAT.lampGlobe.emissive = lampsOn ? [1.0, 0.92, 0.72] : [0, 0, 0];
   CAR_MAT.headlamp.emissive = lampsOn ? [1, 1, 0.95] : [0.35, 0.36, 0.37];
 }
 
@@ -91,13 +90,6 @@ function setPointLights() {
     add(worldPointOf(icar.lampLeft, [0, 0, 0.05]), [1.7, 1.6, 1.35], forward, 0.84, 34);
     add(worldPointOf(icar.lampRight, [0, 0, 0.05]), [1.7, 1.6, 1.35], forward, 0.84, 34);
 
-    // Enam lampu jalan terdekat dengan kamera
-    const eye = camera.rendered.position;
-    const nearest = lampPositions
-      .map((p) => ({ p, d: Vec3.length(Vec3.subtract(p, eye)) }))
-      .sort((a, b) => a.d - b.d)
-      .slice(0, MAX_POINT_LIGHTS - 2);
-    for (const lamp of nearest) add(lamp.p, [1.25, 1.05, 0.72], [0, 0, 0], -1, 17);
   }
 
   gl.uniform1i(u.pointLightCount, cutoffs.length);
@@ -270,6 +262,7 @@ const sceneActions = {
     animation.manual = {};
     animation.speedScale = 1;
     animation.windStrength = 1;
+    resetIcarDrive();
     camera.projection = "PERSPECTIVE";
     selectedNode = null;
     setCameraPreset("foto1");
@@ -359,16 +352,11 @@ function render(time) {
 function initScene() {
   loadTextures();
   loadIcarAssets();
-  loadMotorAssets();
   loadEnvironmentAssets();
 
   rootId = addNode("Dunia", null, Mat4.identity(), null, { note: "Akar scene graph" });
   createEnvironment(rootId);
   createIcar(rootId);
-
-  const trafficId = addNode("Lalu Lintas", rootId, Mat4.identity(), null, { note: "Dua motor seperti foto pertama" });
-  createMotor(trafficId, 1, { start: HALTE_STOP + 18, offset: 3.4, speed: 7.2 });
-  createMotor(trafficId, 2, { start: HALTE_STOP + 44, offset: 2.2, speed: 6.4 });
 
   setCameraPreset("foto1", true);
   camera.rendered = camera.current;
